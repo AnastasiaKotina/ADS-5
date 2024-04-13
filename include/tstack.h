@@ -7,9 +7,11 @@
 
 template <typename T, int size>
 class TStack {
+
 private:
     T* data;
     int top;
+
 public:
     TStack() : top(-1) {
         data = new T[size];
@@ -18,17 +20,19 @@ public:
         delete[] data;
     }
     void push(T value) {
-        if (!isFull())
+        if (!isFull()) {
             data[++top] = value;
-        else
+        } else {
             throw std::overflow_error("Stack is full");
+        }
     }
     T get() const {
          return data[top];
     }
     T pop() {
-        if (isEmpty())
+        if (isEmpty()) {
             throw std::underflow_error("Stack is empty");
+        }
         return data[top--];
     }
     bool isEmpty() const {
