@@ -3,7 +3,7 @@
 #include <map>
 #include "tstack.h"
 
-int priority(char x) {
+int prior(char x) {
     if (x == '(') {
         return 0;
     } else if (x == ')') {
@@ -17,32 +17,31 @@ int priority(char x) {
     }
 }
 std::string infx2pstfx(std::string inf) {
- std::string num, num1;
+    std::string num, num1;
     TStack <char, 100> stack1;
     for (auto& x : inf) {
-        int pr = priority(x);
+        int pr = prior(x);
         if (pr == -1) {
             num = num + x + ' ';
         } else {
             char znach = stack1.get();
-
-            if ((pr == 0 || priority(znach) < pr || stack1.isEmpty()) || x == ')') {
-                while (priority(znach) >= pr) {
-                    num = num + znach + ' ';
-                    stack1.pop();
-                    if (!stack1.isEmpty()) {
-                        znach = stack1.get();
-                    } else {
-                        break;
-                    }
-                }
+            if (pr == 0 || prior(znach) < pr && stack1.isEmpty() || x == ')') {
                 if (x == ')') {
+                    while (prior(znach) >= pr) {
+                        num = num + znach + ' ';
+                        stack1.pop();
+                        if (!stack1.isEmpty()) {
+                            znach = stack1.get();
+                        } else {
+                            break;
+                        }
+                    }
                     stack1.pop();
                 } else {
                     stack1.push(x);
                 }
             } else {
-                while (priority(znach) >= pr) {
+                while (prior(znach) >= pr) {
                     num = num + znach + ' ';
                     stack1.pop();
 
@@ -55,7 +54,7 @@ std::string infx2pstfx(std::string inf) {
                 stack1.push(x);
             }
         }
-     }
+    }
     while (!stack1.isEmpty()) {
         num = num + stack1.get() + ' ';
         stack1.pop();
@@ -70,7 +69,7 @@ int eval(std::string pref) {
   TStack<int, 100> stack1;
     std::string num = "";
     for (int i = 0; i < pref.size(); ++i) {
-        if (priority(pref[i]) == -1) {
+        if (prior(pref[i]) == -1) {
             if (pref[i] == ' ') {
                 continue;
             } else if (isdigit(pref[i + 1])) {
@@ -100,7 +99,6 @@ int eval(std::string pref) {
                 break;
             }
         }
-
     }
     return stack1.get();
 }
